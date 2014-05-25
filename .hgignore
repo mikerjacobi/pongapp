@@ -2,6 +2,6 @@ syntax: glob
 
 .gradle
 local.properties
-.idea
-workspace.xml
+.idea/workspace.xml
 .DS_Store
+app/build
