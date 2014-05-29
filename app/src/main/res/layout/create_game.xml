@@ -35,6 +35,6 @@
         android:layout_below="@+id/player1"
         android:layout_centerHorizontal="true"
         android:text="@string/player2"
-        android:textColor="#0000ff"/>
+        android:textColor="#00ff00"/>
 
 </RelativeLayout>

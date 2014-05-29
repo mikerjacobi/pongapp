@@ -20,6 +20,8 @@ public class ScoreScreen extends ActionBarActivity{
     private String id;
     private String p1;
     private String p2;
+    private String startTime;
+    private boolean isPregame = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,9 @@ public class ScoreScreen extends ActionBarActivity{
         try {
             game = new JSONObject(create_game_response);
             TextView title = (TextView) findViewById(R.id.game_title);
-            title.setText((String)game.get("time"));
+            title.setText("Choose Starter");
+
+            this.startTime = (String)game.get("time");
             this.id = (String)game.get("id");
             this.p1 = (String)game.get("p1");
             this.p2 = (String)game.get("p2");
@@ -71,7 +75,34 @@ public class ScoreScreen extends ActionBarActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    public void set_starter(View view){
+        Map<Object,Object> data = new HashMap<Object,Object>();
+        data.put("method", "POST");
+        data.put("callback", new StarterCallBack());
+        String player;
+        switch (view.getId()) {
+            case (R.id.player1):
+                player = this.p1;
+                break;
+            case (R.id.player2):
+                player = this.p2;
+                break;
+            default:
+                player = "error";
+                break;
+        }
+        String url = String.format("%s/starter/%s/%s",getString(R.string.server_url), this.id, player);
+        data.put("url", url);
+        new RestCaller().execute(data);
+    }
+
     public void increment_score(View view) {
+        if (isPregame){
+            this.set_starter(view);
+            this.isPregame = false;
+            return;
+        }
+
         LongClickButton scorer_button = (LongClickButton) findViewById(view.getId());
         scorer_button.setEnabled(false);
         Map<Object,Object> data = new HashMap<Object,Object>();
@@ -164,7 +195,7 @@ public class ScoreScreen extends ActionBarActivity{
                     TextView p2ScoreTV = (TextView) findViewById(R.id.p2Score);
                     p1ScoreTV.setText(Integer.toString(p1Score));
                     p2ScoreTV.setText(Integer.toString(p2Score));
-                    String[] history = (String[]) data.get("history");
+                    //String[] history = (String[]) data.get("history");
                     //stdout.setText(Arrays.toString(history));
                     if ((Boolean) game.get("game_over")){
                         stdout.setText(game.get("winner") + " wins.");
@@ -180,9 +211,35 @@ public class ScoreScreen extends ActionBarActivity{
                 stdout.setVisibility(View.VISIBLE);
                 stdout.setText("ERROR");
             }
-
-
             but.setEnabled(true);
+        }
+    }
+
+    class StarterCallBack implements Callback{
+        @Override
+        public void invoke(Map<Object, Object> data) {
+            JSONObject resp;
+            TextView stdout = (TextView) findViewById(R.id.stdout);
+            TextView title = (TextView) findViewById(R.id.game_title);
+
+            if ((Integer) data.get("statusCode") == 200) {
+                try {
+                    resp = new JSONObject((String) data.get("response"));
+
+                    if ((Boolean) resp.get("success")){
+                        title.setText(startTime);
+                    }
+                    else{
+                        title.setText("ERROR");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                stdout.setVisibility(View.VISIBLE);
+                stdout.setText("ERROR");
+            }
         }
     }
 
