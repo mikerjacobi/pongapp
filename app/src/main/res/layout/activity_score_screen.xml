@@ -39,7 +39,7 @@
         custom:onKeyLongPress="decrement_score"
         android:layout_centerHorizontal="true"
         android:width="150dp"
-        android:textColor="#0000ff"
+        android:textColor="#00ff00"
         android:height="400dp" />
 
 
@@ -82,7 +82,7 @@
         android:layout_alignTop="@+id/game_title"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:textColor="#0000ff"/>
+        android:textColor="#00ff00"/>
 
     <Button
         android:layout_width="wrap_content"
