@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="player1">Loth</string>
     <string name="player2">Jacobra</string>
-    <string name="server_url">http://ec2-54-186-165-220.us-west-2.compute.amazonaws.com:8085</string>
+    <string name="server_url">http://jacobra.com:8085</string>
     <string name="create_game">Create Game</string>
     <string name="rematch">Rematch</string>
     <string name="stdout">default</string>

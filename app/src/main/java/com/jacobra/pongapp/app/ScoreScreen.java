@@ -1,8 +1,8 @@
 package com.jacobra.pongapp.app;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,11 +12,10 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScoreScreen extends ActionBarActivity{
+public class ScoreScreen extends AppCompatActivity {
     private String id;
     private String p1;
     private String p2;
@@ -40,6 +39,7 @@ public class ScoreScreen extends ActionBarActivity{
             this.p1 = (String)game.get("p1");
             this.p2 = (String)game.get("p2");
         } catch (JSONException e) {
+            System.out.println(e.toString());
             e.printStackTrace();
         }
 
@@ -57,6 +57,7 @@ public class ScoreScreen extends ActionBarActivity{
         Button rematch = (Button) findViewById(R.id.rematch);
         stdout.setVisibility(View.INVISIBLE);
         rematch.setVisibility(View.INVISIBLE);
+
     }
 
 
