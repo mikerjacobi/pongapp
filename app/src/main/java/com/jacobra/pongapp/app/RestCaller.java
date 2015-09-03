@@ -1,23 +1,18 @@
 package com.jacobra.pongapp.app;
 
 import android.os.AsyncTask;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
+import com.squareup.okhttp.*;
 import java.util.Map;
 
 /**
  * Created by mjacobi on 5/23/2014.
- *
  * RestCaller needs a hashmap input with:
  * url
  * method
  * callback
  */
+
+
 
 interface Callback{
     void invoke(Map<Object, Object> data);
@@ -28,24 +23,22 @@ public class RestCaller extends AsyncTask<Map<Object,Object>, Void, Map<Object,O
         try {
             String url = (String) data[0].get("url");
             String method = (String) data[0].get("method");
-            HttpClient client = new DefaultHttpClient();
-            HttpResponse response;
+            OkHttpClient client = new OkHttpClient();
+            Response response;
             if (method == "GET") {
-                HttpGet request = new HttpGet(url);
-                response = client.execute(request);
-
+                Request request = new Request.Builder().url(url).build();
+                response = client.newCall(request).execute();
             } else if (method == "POST")  {
-                HttpPost request = new HttpPost(url);
-                response = client.execute(request);
+                RequestBody body = RequestBody.create(null, "");
+                Request request = new Request.Builder().url(url).post(body).build();
+                response = client.newCall(request).execute();
             } else {
                 data[0].put("response", "Missing method");
                 data[0].put("statusCode", -9999);
                 return data[0];
             }
-
-            int statusCode = response.getStatusLine().getStatusCode();
-            data[0].put("response", EntityUtils.toString(response.getEntity(), "UTF-8"));
-            data[0].put("statusCode", statusCode);
+            data[0].put("response", response.body().string());
+            data[0].put("statusCode", response.code());
 
         } catch (Exception e) {
             data[0].put("response", e.toString());

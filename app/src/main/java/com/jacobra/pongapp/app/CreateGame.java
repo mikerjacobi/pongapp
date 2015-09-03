@@ -2,7 +2,7 @@ package com.jacobra.pongapp.app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class CreateGame extends ActionBarActivity {
+public class CreateGame extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +49,6 @@ public class CreateGame extends ActionBarActivity {
         data.put("method", "POST");
         data.put("url", url);
         data.put("callback", new CreateGameCallBack());
-
         new RestCaller().execute(data);
 
 
